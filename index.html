@@ -1,0 +1,646 @@
+<html lang="vi" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Wedding of Thảo & Thành</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Iconify -->
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Great+Vibes&family=Montserrat:wght@200;300;400;500&display=swap"
+        rel="stylesheet">
+
+    <style>
+        .font-serif-heading {
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        .font-script {
+            font-family: 'Great Vibes', cursive;
+        }
+
+        .font-body {
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .paper-texture {
+            background-image: url("https://www.transparenttextures.com/patterns/cream-paper.png");
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+            will-change: opacity, visibility;
+        }
+
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: none;
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* Modal / Lightbox transitions */
+        #lightbox,
+        #qr-modal {
+            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+        }
+
+        #lightbox.open,
+        #qr-modal.open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        #lightbox.closed,
+        #qr-modal.closed {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        /* Background Slideshow */
+        @keyframes slideshow {
+            0% {
+                opacity: 0;
+                transform: scale(1);
+            }
+
+            5% {
+                opacity: 1;
+            }
+
+            20% {
+                opacity: 1;
+            }
+
+            25% {
+                opacity: 0;
+                transform: scale(1.05);
+            }
+
+            100% {
+                opacity: 0;
+            }
+        }
+
+        .slideshow-item {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            animation: slideshow 20s linear infinite;
+        }
+
+        .slideshow-item:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .slideshow-item:nth-child(2) {
+            animation-delay: 4s;
+        }
+
+        .slideshow-item:nth-child(3) {
+            animation-delay: 8s;
+        }
+
+        .slideshow-item:nth-child(4) {
+            animation-delay: 12s;
+        }
+
+        .slideshow-item:nth-child(5) {
+            animation-delay: 16s;
+        }
+
+        /* Toast Notifications */
+        #toast-container {
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .toast-active {
+            opacity: 1 !important;
+            transform: translateY(0) !important;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-[#fcfbf9] text-[#4a4a4a] font-body relative overflow-x-hidden selection:bg-[#6b7c62] selection:text-white">
+
+    <!-- Paper Texture Overlay -->
+    <div class="paper-texture fixed inset-0 z-40 mix-blend-multiply"></div>
+
+    <!-- Lightbox Overlay -->
+    <div id="lightbox" class="fixed inset-0 z-[100] bg-black/95 closed flex items-center justify-center p-4">
+        <button id="lightbox-close"
+            class="absolute top-6 right-6 p-2 text-white/70 hover:text-white hover:bg-white/10 rounded-full transition-all flex items-center justify-center">
+            <iconify-icon icon="solar:close-circle-linear" width="32" height="32" stroke-width="1.5"></iconify-icon>
+        </button>
+        <img id="lightbox-img" src="" alt="Gallery Fullscreen"
+            class="max-h-[85vh] max-w-full object-contain shadow-2xl rounded-sm">
+        <p class="absolute bottom-6 text-white/50 text-xs tracking-widest uppercase">Chạm ra ngoài để đóng</p>
+    </div>
+
+    <!-- QR Code Modal -->
+    <div id="qr-modal" class="fixed inset-0 z-[110] bg-black/95 closed flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl p-8 max-w-2xl w-full relative">
+            <button id="qr-modal-close"
+                class="absolute top-4 right-4 text-stone-400 hover:text-stone-800 transition-colors">
+                <iconify-icon icon="solar:close-circle-linear" width="28" height="28"></iconify-icon>
+            </button>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 text-center">
+                <div class="p-4 border border-stone-100 rounded-xl bg-stone-50/30">
+                    <h3 class="font-serif-heading text-xl mb-6 text-[#2c2c2c]">Mừng cưới Chú Rể</h3>
+                    <div
+                        class="aspect-square bg-stone-100 rounded-xl flex items-center justify-center overflow-hidden mb-6">
+                        <img src="img/qr_groom.jpg" alt="QR Groom" class="w-full h-full object-contain"
+                            onerror="this.src='img/qr.jpeg'">
+                    </div>
+                    <p class="text-xs text-[#6b7c62] font-medium uppercase tracking-widest mb-1">Vietcombank</p>
+                    <p class="font-serif-heading text-2xl tracking-tighter text-[#2c2c2c]">1234 567 890</p>
+                    <p class="text-[10px] text-stone-400 uppercase tracking-widest mt-2">Hoàng Việt Thành</p>
+                </div>
+                <div class="p-4 border border-stone-100 rounded-xl bg-stone-50/30">
+                    <h3 class="font-serif-heading text-xl mb-6 text-[#2c2c2c]">Mừng cưới Cô Dâu</h3>
+                    <div
+                        class="aspect-square bg-stone-100 rounded-xl flex items-center justify-center overflow-hidden mb-6">
+                        <img src="img/qr_bride.jpg" alt="QR Bride" class="w-full h-full object-contain"
+                            onerror="this.src='img/qr.jpeg'">
+                    </div>
+                    <p class="text-xs text-[#6b7c62] font-medium uppercase tracking-widest mb-1">Seabank</p>
+                    <p class="font-serif-heading text-2xl tracking-tighter text-[#2c2c2c]">0025268888</p>
+                    <p class="text-[10px] text-stone-400 uppercase tracking-widest mt-2">Ma Thị Thảo</p>
+                </div>
+            </div>
+            <p class="text-center mt-8 text-stone-400 text-[10px] italic">"Cảm ơn bạn đã sẻ chia niềm vui cùng chúng
+                mình!"</p>
+        </div>
+    </div>
+
+    <!-- Main Layout Wrapper -->
+    <div class="flex flex-col lg:flex-row min-h-screen w-full">
+
+        <!-- LEFT SIDE: Sticky Banner -->
+        <aside class="relative w-full lg:w-[75%] h-[60vh] lg:h-screen lg:sticky lg:top-0 overflow-hidden bg-stone-900">
+            <!-- Background Image Slideshow -->
+            <div class="absolute inset-0">
+                <div class="slideshow-item">
+                    <img src="img/img13.jpg" alt="Couple" class="w-full h-full object-cover object-top opacity-80">
+                </div>
+                <div class="slideshow-item">
+                    <img src="img/img1.jpg" alt="Couple" class="w-full h-full object-cover object-top opacity-80">
+                </div>
+                <div class="slideshow-item">
+                    <img src="img/img10.jpg" alt="Couple" class="w-full h-full object-cover object-top opacity-80">
+                </div>
+                <div class="slideshow-item">
+                    <img src="img/img20.jpg" alt="Couple" class="w-full h-full object-cover object-top opacity-80">
+                </div>
+                <div class="slideshow-item">
+                    <img src="img/img7.jpg" alt="Couple" class="w-full h-full object-cover object-top opacity-80">
+                </div>
+                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 z-10"></div>
+                <div class="bg-stone-900/10 mix-blend-overlay absolute inset-0 z-10"></div>
+            </div>
+
+            <!-- Floating Title Content -->
+            <div class="absolute bottom-10 left-6 lg:bottom-16 lg:left-16 z-20 text-white max-w-4xl">
+                <p
+                    class="lg:text-xl uppercase text-lg italic text-[#d4cbb3] tracking-widest font-serif-heading border-[#d4cbb3] border-l-2 mb-4 pl-4">
+                    Thiệp mời tham dự lễ thành hôn của
+                </p>
+                <h1 class="lg:text-9xl tracking-tight leading-none text-7xl font-script mb-2 drop-shadow-lg">
+                    Thành<span class="lg:text-7xl text-5xl opacity-80 mx-[30px]">&</span>Thảo
+                </h1>
+                <div class="mt-8 flex items-center gap-4 text-[#d4cbb3]">
+                    <iconify-icon icon="solar:map-point-linear" width="20" height="20"
+                        stroke-width="1.5"></iconify-icon>
+                    <span class="font-serif-heading text-xl tracking-wide">Thái Nguyên, Việt Nam</span>
+                </div>
+            </div>
+
+            <!-- Audio Control -->
+            <div class="absolute top-6 right-6 z-30">
+                <button id="music-btn"
+                    class="bg-white/10 backdrop-blur-md p-3 rounded-full hover:bg-white/20 transition-all border border-white/20 group relative overflow-hidden flex items-center justify-center">
+                    <div id="music-icon-wrapper"
+                        class="relative z-10 text-white transition-transform duration-300 flex items-center justify-center">
+                        <iconify-icon id="music-icon" icon="solar:play-circle-linear" width="20" height="20"
+                            stroke-width="1.5"></iconify-icon>
+                    </div>
+                </button>
+            </div>
+
+            <!-- Congratulatory Toasts -->
+            <div id="toast-container" class="absolute top-6 left-6 z-30 pointer-events-none">
+                <div id="toast"
+                    class="bg-black/20 backdrop-blur-md border border-white/10 p-4 rounded-lg shadow-xl max-w-[280px] transition-all duration-700 opacity-0 translate-y-6 flex items-start gap-3">
+                    <div class="bg-[#d4cbb3]/20 p-2 rounded-full flex-shrink-0">
+                        <iconify-icon icon="solar:heart-bold" class="text-[#d4cbb3]" width="16"
+                            height="16"></iconify-icon>
+                    </div>
+                    <div>
+                        <p id="toast-name"
+                            class="font-serif-heading text-[#d4cbb3] text-[10px] uppercase tracking-[0.2em] mb-1"></p>
+                        <p id="toast-message" class="text-white/90 text-[11px] leading-relaxed italic"></p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- RIGHT SIDE: Scrollable Content -->
+        <main class="relative w-full lg:w-[25%] bg-[#fcfbf9] border-l border-[#e5e0d6]">
+
+            <!-- Intro / Date Section -->
+            <section class="px-8 py-16 lg:py-24 border-b border-[#e5e0d6] text-center">
+                <div class="fade-in-section is-visible">
+                    <span class="font-serif-heading text-5xl tracking-tight text-[#2c2c2c] block mb-2">22 Tháng 3</span>
+                    <span class="font-serif-heading text-3xl tracking-tight text-[#2c2c2c] block mb-8">2026</span>
+                    <p class="font-serif-heading text-lg italic text-stone-500 leading-relaxed">
+                        "Chung tôi đã chuẩn bị sự yêu thương, thấu hiểu và trưởng thành để viết lên mọi kế hoạch rồi
+                        thực hiện nó bằng cả cuộc đờis"
+                    </p>
+                    <div class="mt-8 flex justify-center">
+                        <iconify-icon icon="solar:arrow-down-linear" width="24" height="24" stroke-width="1.5"
+                            class="text-[#6b7c62] animate-bounce"></iconify-icon>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Bride & Groom -->
+            <section class="px-8 py-16 border-b border-[#e5e0d6]">
+                <div class="text-center mb-10 fade-in-section is-visible">
+                    <h2 class="font-serif-heading text-3xl tracking-tight text-[#2c2c2c]">Gia Đình Hai Bên</h2>
+                </div>
+                <div class="space-y-12">
+                    <!-- Bride -->
+                    <div class="flex flex-col items-center text-center fade-in-section is-visible">
+                        <div class="w-32 h-32 mb-4 rounded-full overflow-hidden border border-[#d4cbb3] p-1">
+                            <img src="img/co_dau.jpg" alt="Bride"
+                                class="w-full h-full object-cover rounded-full grayscale hover:grayscale-0 transition-all duration-700">
+                        </div>
+                        <h3 class="font-script text-3xl tracking-tight text-[#2c2c2c]">Ma Thị Thảo</h3>
+                        <p class="text-xs font-serif-heading uppercase tracking-widest text-[#6b7c62] mt-1 mb-2">Cô Dâu
+                        </p>
+                        <p class="font-serif-heading text-sm text-stone-500 italic">Con gái của Ông Ma Doãn Linh<br>&
+                            Bà Lê Thị Huyên</p>
+                    </div>
+
+                    <div class="text-center text-[#d4cbb3] font-serif-heading text-2xl italic fade-in-section">&</div>
+
+                    <!-- Groom -->
+                    <div class="flex flex-col items-center text-center fade-in-section">
+                        <div class="w-32 h-32 mb-4 rounded-full overflow-hidden border border-[#d4cbb3] p-1">
+                            <img src="img/chu_re.jpg" alt="Groom"
+                                class="w-full h-full object-cover rounded-full grayscale hover:grayscale-0 transition-all duration-700">
+                        </div>
+                        <h3 class="font-script text-3xl tracking-tight text-[#2c2c2c]">Việt Thành</h3>
+                        <p class="text-xs font-serif-heading uppercase tracking-widest text-[#6b7c62] mt-1 mb-2">Chú Rể
+                        </p>
+                        <p class="font-serif-heading text-sm text-stone-500 italic">Con trai của Ông Hoàng Quốc
+                            Khánh<br>& Bà Đoàn Kim Thuỷ</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Countdown -->
+            <section class="px-8 py-12 bg-[#f4f1ea] border-b border-[#e5e0d6] text-center">
+                <p class="text-xs uppercase tracking-[0.2em] text-stone-500 mb-6">Đếm Ngược</p>
+                <div class="grid grid-cols-4 gap-2 font-serif-heading text-[#2c2c2c] fade-in-section">
+                    <div>
+                        <span class="text-2xl font-medium tracking-tight" id="days">00</span>
+                        <span class="text-[9px] uppercase text-stone-400 block mt-1">Ngày</span>
+                    </div>
+                    <div>
+                        <span class="text-2xl font-medium tracking-tight" id="hours">00</span>
+                        <span class="text-[9px] uppercase text-stone-400 block mt-1">Giờ</span>
+                    </div>
+                    <div>
+                        <span class="text-2xl font-medium tracking-tight" id="minutes">00</span>
+                        <span class="text-[9px] uppercase text-stone-400 block mt-1">Phút</span>
+                    </div>
+                    <div>
+                        <span class="text-2xl font-medium tracking-tight" id="seconds">00</span>
+                        <span class="text-[9px] uppercase text-stone-400 block mt-1">Giây</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Events -->
+            <section class="px-6 py-16 border-b border-[#e5e0d6]">
+                <div class="text-center mb-10 fade-in-section">
+                    <h2 class="font-serif-heading text-3xl tracking-tight text-[#2c2c2c]">Sự Kiện</h2>
+                </div>
+                <div class="space-y-6">
+                    <!-- Ceremony -->
+                    <div
+                        class="bg-white p-6 rounded-lg shadow-sm border border-stone-100 text-center fade-in-section hover:border-[#6b7c62]/30 transition-colors">
+                        <iconify-icon icon="solar:heart-angle-linear" width="24" height="24" stroke-width="1.5"
+                            class="text-[#6b7c62] mx-auto mb-3 block"></iconify-icon>
+                        <h3 class="font-serif-heading text-xl tracking-tight text-[#2c2c2c]">Lễ Vu Quy (Nhà Gái)</h3>
+                        <p class="text-xs font-medium text-[#6b7c62] uppercase tracking-widest mt-2 mb-4">10:00 AM</p>
+                        <p class="text-sm text-stone-500 font-light leading-relaxed mb-4">
+                            Xóm Chú 2, xã Trung Hội<br>Tỉnh Thái Nguyên
+                        </p>
+                        <a href="https://maps.app.goo.gl/DV7s7EkrNhZcGvhm6?g_st=iz" target="_blank"
+                            class="text-xs border-b border-[#2c2c2c] pb-0.5 hover:text-[#6b7c62] hover:border-[#6b7c62] transition-colors">Chỉ
+                            đường</a>
+                    </div>
+
+                    <!-- Reception -->
+                    <div
+                        class="bg-white p-6 rounded-lg shadow-sm border border-stone-100 text-center fade-in-section hover:border-[#6b7c62]/30 transition-colors">
+                        <iconify-icon icon="solar:wineglass-linear" width="24" height="24" stroke-width="1.5"
+                            class="text-[#6b7c62] mx-auto mb-3 block"></iconify-icon>
+                        <h3 class="font-serif-heading text-xl tracking-tight text-[#2c2c2c]">Lễ Thành Hôn (Nhà Trai)
+                        </h3>
+                        <p class="text-xs font-medium text-[#6b7c62] uppercase tracking-widest mt-2 mb-4">15:30 PM</p>
+                        <p class="text-sm text-stone-500 font-light leading-relaxed mb-4">
+                            Tổ dân phố Um, phường Quyết Thắng<br>Thái Nguyên
+                        </p>
+                        <a href="https://maps.app.goo.gl/CX1BRgzwHprBiJ9b6?g_st=iz" target="_blank"
+                            class="text-xs border-b border-[#2c2c2c] pb-0.5 hover:text-[#6b7c62] hover:border-[#6b7c62] transition-colors">Chỉ
+                            đường</a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Gallery (Compact Grid) -->
+            <section class="py-1 bg-stone-100">
+                <div class="grid grid-cols-2 gap-0.5">
+                    <div class="aspect-square relative group overflow-hidden cursor-zoom-in">
+                        <img src="img/img11.jpg"
+                            class="gallery-img w-full h-full object-cover grayscale transition-all duration-500 group-hover:grayscale-0 group-hover:scale-105">
+                    </div>
+                    <div class="aspect-square relative group overflow-hidden cursor-zoom-in">
+                        <img src="img/img13.jpg"
+                            class="gallery-img w-full h-full object-cover grayscale transition-all duration-500 group-hover:grayscale-0 group-hover:scale-105">
+                    </div>
+                    <div class="aspect-square relative group overflow-hidden cursor-zoom-in">
+                        <img src="img/img14.jpg"
+                            class="gallery-img w-full h-full object-cover grayscale transition-all duration-500 group-hover:grayscale-0 group-hover:scale-105">
+                    </div>
+                    <div class="aspect-square relative group overflow-hidden cursor-zoom-in">
+                        <img src="img/img15.jpg"
+                            class="gallery-img w-full h-full object-cover grayscale transition-all duration-500 group-hover:grayscale-0 group-hover:scale-105">
+                    </div>
+                </div>
+            </section>
+
+            <!-- RSVP Form -->
+            <section class="hidden px-6 py-16 bg-white">
+                <div class="text-center mb-8 fade-in-section">
+                    <h2 class="font-serif-heading text-3xl tracking-tight text-[#2c2c2c] mb-2">Xác Nhận Tham Dự</h2>
+                    <p class="text-xs text-stone-500 uppercase tracking-widest">Vui lòng phản hồi trước 15/03</p>
+                </div>
+                <form class="space-y-6 fade-in-section">
+                    <div>
+                        <input type="text"
+                            class="w-full bg-[#f9f7f2] border-none text-sm p-3 rounded text-stone-700 placeholder-stone-400 focus:ring-1 focus:ring-[#6b7c62] outline-none"
+                            placeholder="Tên khách mời">
+                    </div>
+                    <div>
+                        <select
+                            class="w-full bg-[#f9f7f2] border-none text-sm p-3 rounded text-stone-700 focus:ring-1 focus:ring-[#6b7c62] outline-none cursor-pointer appearance-none">
+                            <option>Sẽ tham dự</option>
+                            <option>Không thể tham dự</option>
+                        </select>
+                    </div>
+                    <div>
+                        <select
+                            class="w-full bg-[#f9f7f2] border-none text-sm p-3 rounded text-stone-700 focus:ring-1 focus:ring-[#6b7c62] outline-none cursor-pointer appearance-none">
+                            <option>1 Người</option>
+                            <option>2 Người</option>
+                        </select>
+                    </div>
+                    <div>
+                        <textarea rows="2"
+                            class="w-full bg-[#f9f7f2] border-none text-sm p-3 rounded text-stone-700 placeholder-stone-400 focus:ring-1 focus:ring-[#6b7c62] outline-none resize-none"
+                            placeholder="Lời chúc..."></textarea>
+                    </div>
+                    <button type="submit"
+                        class="w-full bg-[#2c2c2c] text-white py-3 rounded text-xs font-medium tracking-widest uppercase hover:bg-[#6b7c62] transition-colors duration-300">
+                        Gửi Xác Nhận
+                    </button>
+                </form>
+            </section>
+
+            <!-- Gifts / Bank Info Button -->
+            <section class="px-6 py-20 bg-[#fcfbf9] border-t border-[#e5e0d6]">
+                <div class="text-center fade-in-section">
+                    <button id="gift-btn"
+                        class="px-8 py-4 bg-[#2c2c2c] text-white rounded-full text-xs font-medium tracking-[0.2em] uppercase hover:bg-[#6b7c62] transition-all duration-300 shadow-xl flex items-center gap-3 mx-auto">
+                        <iconify-icon icon="solar:gift-linear" width="20" height="20"></iconify-icon>
+                        Gửi quà cho cô dâu chú rể
+                    </button>
+                </div>
+            </section>
+
+            <!-- Footer -->
+            <footer class="bg-[#f4f1ea] py-10 text-center border-t border-[#d4cbb3]">
+                <p class="font-script text-3xl text-[#6b7c62] mb-4">T & T</p>
+                <div class="flex justify-center gap-4 mb-6">
+                    <a href="#"
+                        class="text-stone-400 hover:text-[#6b7c62] transition-colors flex items-center justify-center">
+                        <iconify-icon icon="solar:instagram-linear" width="20" height="20"
+                            stroke-width="1.5"></iconify-icon>
+                    </a>
+                    <a href="#"
+                        class="text-stone-400 hover:text-[#6b7c62] transition-colors flex items-center justify-center">
+                        <iconify-icon icon="solar:global-linear" width="20" height="20"
+                            stroke-width="1.5"></iconify-icon>
+                    </a>
+                </div>
+                <p class="text-[10px] text-stone-400 uppercase tracking-widest">© 2026 Thành & Thảo</p>
+            </footer>
+        </main>
+    </div>
+
+    <script>
+        // --- Music Player Logic --- 
+        const musicSource = "https://cdn.pixabay.com/audio/2024/01/16/audio_e2b992254f.mp3";
+        const audio = new Audio(musicSource);
+        audio.loop = true;
+        let isPlaying = false;
+
+        const musicBtn = document.getElementById('music-btn');
+        const musicIcon = document.getElementById('music-icon');
+
+        musicBtn.addEventListener('click', () => {
+            if (isPlaying) {
+                audio.pause();
+                musicIcon.setAttribute('icon', 'solar:play-circle-linear');
+                musicBtn.classList.remove('animate-pulse');
+            } else {
+                audio.play();
+                musicIcon.setAttribute('icon', 'solar:pause-circle-linear');
+                musicBtn.classList.add('animate-pulse');
+            }
+            isPlaying = !isPlaying;
+        });
+
+        // --- Lightbox Gallery Logic --- 
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const closeBtn = document.getElementById('lightbox-close');
+        const galleryImages = document.querySelectorAll('.gallery-img');
+
+        // Open Lightbox 
+        galleryImages.forEach(img => {
+            img.addEventListener('click', (e) => {
+                e.stopPropagation();
+                lightboxImg.src = e.target.src;
+                lightbox.classList.remove('closed');
+                lightbox.classList.add('open');
+            });
+        });
+
+        // Close functions 
+        const closeLightbox = () => {
+            lightbox.classList.remove('open');
+            lightbox.classList.add('closed');
+            setTimeout(() => {
+                lightboxImg.src = '';
+            }, 300);
+        };
+
+        closeBtn.addEventListener('click', closeLightbox);
+
+        // Close on background click 
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                closeLightbox();
+            }
+        });
+
+        // Close on Escape key 
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && lightbox.classList.contains('open')) {
+                closeLightbox();
+            }
+        });
+
+        // --- Countdown Logic --- 
+        const weddingDate = new Date("March 22, 2026 10:00:00").getTime();
+        const timer = setInterval(function () {
+            const now = new Date().getTime();
+            const distance = weddingDate - now;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            if (document.getElementById("days")) {
+                document.getElementById("days").innerText = days.toString().padStart(2, '0');
+                document.getElementById("hours").innerText = hours.toString().padStart(2, '0');
+                document.getElementById("minutes").innerText = minutes.toString().padStart(2, '0');
+                document.getElementById("seconds").innerText = seconds.toString().padStart(2, '0');
+            }
+
+            if (distance < 0) {
+                clearInterval(timer);
+            }
+        }, 1000);
+
+        // --- Fade In Animation --- 
+        const observerOptions = { threshold: 0.1 };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in-section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // --- Congratulatory Toasts Logic ---
+        const toasts = [
+            { name: "Phương Thảo", msg: "Chúc mừng hạnh phúc hai bạn! Mãi mãi mặn nồng như ngày đầu nhé." },
+            { name: "Hoàng Nam", msg: "Happy Wedding! Chúc Thành và Thảo trăm năm hạnh phúc, sớm có quý tử." },
+            { name: "Anh Tuyết", msg: "Chúc mừng đôi bạn trẻ! Một chương mới tuyệt vời đang chờ đón hai bạn." },
+            { name: "Đức Anh", msg: "Mãi yêu thương và trân trọng nhau nhé! Chúc mừng đám cưới Thảo & Thành." },
+            { name: "Minh Ngọc", msg: "Trăm năm tình viên mãn, bạc đầu nghĩa phu thê. Chúc mừng hai bạn!" }
+        ];
+
+        let toastIndex = 0;
+        const toastEl = document.getElementById('toast');
+        const toastName = document.getElementById('toast-name');
+        const toastMsg = document.getElementById('toast-message');
+
+        function showNextToast() {
+            if (toastIndex >= toasts.length) return; // Only show each once, or remove this to loop
+
+            const current = toasts[toastIndex];
+            toastName.innerText = current.name;
+            toastMsg.innerText = current.msg;
+
+            // Show
+            setTimeout(() => {
+                toastEl.classList.add('toast-active');
+            }, 1000);
+
+            // Hide after 5 seconds
+            setTimeout(() => {
+                toastEl.classList.remove('toast-active');
+                toastIndex++;
+
+                // Show next after a 2 second gap
+                if (toastIndex < toasts.length) {
+                    setTimeout(showNextToast, 2000);
+                }
+            }, 6000);
+        }
+
+        // Start toasts after a short delay when page loads
+        window.addEventListener('load', () => {
+            setTimeout(showNextToast, 3000);
+        });
+
+        // --- QR Modal Logic ---
+        const qrModal = document.getElementById('qr-modal');
+        const giftBtn = document.getElementById('gift-btn');
+        const qrCloseBtn = document.getElementById('qr-modal-close');
+
+        const openQRModal = () => {
+            qrModal.classList.remove('closed');
+            qrModal.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        };
+
+        const closeQRModal = () => {
+            qrModal.classList.remove('open');
+            qrModal.classList.add('closed');
+            document.body.style.overflow = '';
+        };
+
+        giftBtn.addEventListener('click', openQRModal);
+        qrCloseBtn.addEventListener('click', closeQRModal);
+        qrModal.addEventListener('click', (e) => {
+            if (e.target === qrModal) closeQRModal();
+        });
+    </script>
+</body>
+
+</html>
