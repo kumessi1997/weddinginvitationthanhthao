@@ -160,36 +160,21 @@
 
     <!-- QR Code Modal -->
     <div id="qr-modal" class="fixed inset-0 z-[110] bg-black/95 closed flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl p-8 max-w-2xl w-full relative">
+        <div class="bg-white rounded-2xl p-8 max-w-md w-full relative">
             <button id="qr-modal-close"
                 class="absolute top-4 right-4 text-stone-400 hover:text-stone-800 transition-colors">
                 <iconify-icon icon="solar:close-circle-linear" width="28" height="28"></iconify-icon>
             </button>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 text-center">
+            <div class="text-center">
                 <div class="p-4 border border-stone-100 rounded-xl bg-stone-50/30">
-                    <h3 class="font-serif-heading text-xl mb-6 text-[#2c2c2c]">Mừng cưới Chú Rể</h3>
+                    <h3 class="font-serif-heading text-xl mb-6 text-[#2c2c2c]">Mừng cưới cô dâu chú rể</h3>
                     <div
-                        class="aspect-square bg-stone-100 rounded-xl flex items-center justify-center overflow-hidden mb-6">
-                        <img src="img/qr_groom.jpg" alt="QR Groom" class="w-full h-full object-contain"
-                            onerror="this.src='img/qr.jpeg'">
+                        class="aspect-square bg-stone-100 rounded-xl flex items-center justify-center overflow-hidden mb-2">
+                        <img src="img/qr.jpeg" alt="QR Code" class="w-full h-full object-contain">
                     </div>
-                    <p class="text-xs text-[#6b7c62] font-medium uppercase tracking-widest mb-1">Vietcombank</p>
-                    <p class="font-serif-heading text-2xl tracking-tighter text-[#2c2c2c]">1234 567 890</p>
-                    <p class="text-[10px] text-stone-400 uppercase tracking-widest mt-2">Hoàng Việt Thành</p>
-                </div>
-                <div class="p-4 border border-stone-100 rounded-xl bg-stone-50/30">
-                    <h3 class="font-serif-heading text-xl mb-6 text-[#2c2c2c]">Mừng cưới Cô Dâu</h3>
-                    <div
-                        class="aspect-square bg-stone-100 rounded-xl flex items-center justify-center overflow-hidden mb-6">
-                        <img src="img/qr_bride.jpg" alt="QR Bride" class="w-full h-full object-contain"
-                            onerror="this.src='img/qr.jpeg'">
-                    </div>
-                    <p class="text-xs text-[#6b7c62] font-medium uppercase tracking-widest mb-1">Seabank</p>
-                    <p class="font-serif-heading text-2xl tracking-tighter text-[#2c2c2c]">0025268888</p>
-                    <p class="text-[10px] text-stone-400 uppercase tracking-widest mt-2">Ma Thị Thảo</p>
                 </div>
             </div>
-            <p class="text-center mt-8 text-stone-400 text-[10px] italic">"Cảm ơn bạn đã sẻ chia niềm vui cùng chúng
+            <p class="text-center mt-6 text-stone-400 text-[10px] italic">"Cảm ơn bạn đã sẻ chia niềm vui cùng chúng
                 mình!"</p>
         </div>
     </div>
